@@ -1,39 +1,42 @@
 package page;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
-import data.DataHelper;
-import org.openqa.selenium.support.FindBy;
+        import com.codeborne.selenide.SelenideElement;
+        import data.DataHelper;
+
+        import static com.codeborne.selenide.Selenide.$;
+        import static com.codeborne.selenide.Selenide.$$;
 
 public class MakingPayment {
-    @FindBy(xpath = "//*[@id="root"]/div/form/fieldset/div[1]/span/span/span[2]/input");
-    private SelenideElement cardNumber;
-    @FindBy(xpath = "//*[@id="root"]/div/form/fieldset/div[2]/span/span[1]/span/span/span[2]/input");
-    private SelenideElement month;
-    @FindBy(xpath = "//*[@id="root"]/div/form/fieldset/div[2]/span/span[2]/span/span/span[2]/input");
-    private SelenideElement year;
-    @FindBy(xpath = "//*[@id="root"]/div/form/fieldset/div[3]/span/span[1]/span/span/span[2]/input");
-    private SelenideElement owner;
-    @FindBy(xpath = "//*[@id=\"root\"]/div/form/fieldset/div[3]/span/span[2]/span/span/span[2]/input");
-    private SelenideElement cvc;
-    @FindBy(xpath = "//*[@id=\"root\"]/div/form/fieldset/div[4]/button");
-    private SelenideElement continueButton;
-    @FindBy(xpath = "//div[@class='notification__content'][text()='Операция одобрена Банком.']");
-    private SelenideElement successfulNotification;
-    @FindBy(xpath = "//div[@class='notification__content'][text()='Ошибка! Банк отказал в проведении операции.']");
-    private SelenideElement errorNotification;
 
-    public void verifyErrorNotificationVisibility() {
+    private SelenideElement cardNumber = $("input[type='text'][placeholder='0000 0000 0000 0000']");
+    private SelenideElement cardMonth = $("input[type='text'][placeholder='08']");
+    private SelenideElement cardYear = $("input[type='text'][placeholder='22']");
+    private SelenideElement cardOwner = $$("form div:nth-child(3) .input__control").first();
+    private SelenideElement cardCvc = $("input[type='text'][placeholder='999']");
+    private SelenideElement continueButton = $("form div:nth-child(4) .button__content");
+    private SelenideElement successNotification = $(".notification_status_ok .notification__content");
+    private SelenideElement errorNotification = $(".notification_status_error .notification__content");
+    private SelenideElement dataEntryError = $(".input__sub");
+
+    public void fillingInThePayersData (DataHelper.ApplicationProcessing applicationProcessing) {
+        cardNumber.setValue(applicationProcessing.getCardNumber());
+        cardMonth.setValue(applicationProcessing.getMonth());
+        cardYear.setValue(applicationProcessing.getYear());
+        cardOwner.setValue(applicationProcessing.getOwner());
+        cardCvc.setValue(applicationProcessing.getCvc());
+        continueButton.click();
+    }
+
+    public void checkPaymentSuccess() {
+        successNotification.shouldBe(Condition.visible);
+    }
+
+    public void checkIfPaymentNotSuccessful() {
         errorNotification.shouldBe(Condition.visible);
     }
 
-    public MakingPayment orderCreation(DataHelper.applicationProcessing data) {
-        cardNumber.setValue(data.getCardNumber());
-        month.setValue(data.getMonth());
-        year.setValue(data.getYear());
-        owner.setValue(data.getOwner());
-        cvc.setValue(data.getCvc());
-        continueButton.click();
-        return MakingPayment.this;
+    public void checkIfWrongFormatOfField() {
+        dataEntryError.shouldBe(Condition.visible);
     }
 }

@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 services:
   mysql:
     image: mysql:8.0.22
@@ -14,13 +14,12 @@ services:
 
   postgres:
     image: postgres:13.0-alpine
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data:/var/lib/postgres
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=app
       - POSTGRES_PASSWORD=pass
 
-    ports:
-      - '5432:5432'
-
-    volumes:
-      - ./data:/var/lib/postgres
