@@ -3,8 +3,11 @@ package data;
 import com.github.javafaker.Faker;
 import lombok.Value;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Date;
 
 public class DataHelper {
     private static Faker faker = new Faker(new Locale("en"));
@@ -40,6 +43,15 @@ public class DataHelper {
     public static int getCardYear() {
         int year = 23 + random.nextInt(10-1);
         return year;
+    }
+
+    public static int getCurrantYear(){
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy");
+        simpleDateFormat.format(calendar.getTime());
+        return getCurrantYear();
     }
 
     public static int getInvalidYear(){
