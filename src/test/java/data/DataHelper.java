@@ -26,8 +26,15 @@ public class DataHelper {
     }
 
     public static ApplicationProcessing getAuthInfoUseTestData() {
-
         return new ApplicationProcessing("4444 4444 4444 4441", "08", "25", "ALEXANDRA IVANOVA", "987");
+    }
+
+    public static ApplicationProcessing getAuthInfoUseTestDataWithDeclinedCard() {
+        return new ApplicationProcessing("4444 4444 4444 4442", "08", "25", "ALEXANDRA IVANOVA", "987");
+    }
+
+    public static ApplicationProcessing getAuthEmptyFormFields() {
+        return new ApplicationProcessing(null, null, null, null, null);
     }
 
     public static int getCardMonth() {

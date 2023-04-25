@@ -45,7 +45,55 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             val statusForPaymentByDebitCard = SQLHelper.getPaymentStatusByDebitCard(paymentId);
             val paymentAmount = SQLHelper.getPaymentAmount(paymentId);
             assertEquals("APPROVED", statusForPaymentByDebitCard);
-            assertEquals("45000", paymentAmount);
+            assertEquals("4500000", paymentAmount);
+        }
+
+        @Test
+        void shouldSuccessWithValidCreditCard() {
+            val optionSelection = new OptionSelection();
+            val makingPayment = optionSelection.buyByCreditCard();
+            val validCardInformation = DataHelper.getAuthInfoUseTestData();
+            makingPayment.fillingInThePayersData(validCardInformation);
+            makingPayment.checkPaymentSuccess();
+            val paymentId = SQLHelper.getPaymentId();
+            val statusForPaymentByCreditCard = SQLHelper.getPaymentStatusByCreditCard(paymentId);
+            assertEquals("APPROVED", statusForPaymentByCreditCard);
 
         }
-}
+        @Test
+        void shouldDeclineWithInvalidDebitCard() {
+            val optionSelection = new OptionSelection();
+            val makingPayment = optionSelection.buyByDebitCard();
+            val validCardInformation = DataHelper.getAuthInfoUseTestDataWithDeclinedCard();
+            makingPayment.fillingInThePayersData(validCardInformation);
+            makingPayment.checkPaymentSuccess();
+            val paymentId = SQLHelper.getPaymentId();
+            val statusForPaymentByDebitCard = SQLHelper.getPaymentStatusByDebitCard(paymentId);
+            assertEquals("DECLINED", statusForPaymentByDebitCard);
+            }
+
+        @Test
+        void shouldDeclineWithInvalidCreditCard() {
+            val optionSelection = new OptionSelection();
+            val makingPayment = optionSelection.buyByCreditCard();
+            val validCardInformation = DataHelper.getAuthInfoUseTestDataWithDeclinedCard();
+            makingPayment.fillingInThePayersData(validCardInformation);
+            makingPayment.checkPaymentSuccess();
+            val paymentId = SQLHelper.getPaymentId();
+            val statusForPaymentByCreditCard = SQLHelper.getPaymentStatusByCreditCard(paymentId);
+            assertEquals("DECLINED", statusForPaymentByCreditCard);
+        }
+
+
+        @Test
+        void shouldThrowAnErrorIfEmptyFields() {
+            val optionSelection = new OptionSelection();
+            val makingPayment = optionSelection.buyByDebitCard();
+            val invalidCardInformation = DataHelper.getAuthEmptyFormFields();
+            makingPayment.fillingInThePayersData(invalidCardInformation);
+            makingPayment.checkIfWrongFormatOfField();
+         }
+
+
+
+    }
