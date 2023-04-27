@@ -10,9 +10,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.postgresql.PGProperty;
 import page.OptionSelection;
 
+import java.util.Properties;
+
 import static com.codeborne.selenide.Selenide.open;
+import static java.lang.System.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
     public class MakingPaymentTest {
@@ -22,9 +26,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             SelenideLogger.addListener("allure", new AllureSelenide());
         }
 
+     //   @BeforeAll
+     //   static void setUpTo() {
+      //      Properties props = org.postgresql.Driver.parseURL("jdbc:postgresql:myDatabase", null);
+
+      //      String host   = props.getProperty(PGProperty.PG_HOST.getName());
+      //      int    port   = Integer.parseInt(props.getProperty(PGProperty.PG_PORT.getName()));
+      //      String dbName = props.getProperty(PGProperty.PG_DBNAME.getName());
+
+     //   }
+
         @BeforeEach
         void setUp() {
-            String appUrl = System.getProperty("app.url");
+            String appUrl = getProperty("app.url");
             open(appUrl);
         }
 
@@ -57,7 +71,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             makingPayment.checkPaymentSuccess();
             val paymentId = SQLHelper.getPaymentId();
             val statusForPaymentByCreditCard = SQLHelper.getPaymentStatusByCreditCard(paymentId);
+            val paymentAmount = SQLHelper.getPaymentAmount(paymentId);
             assertEquals("APPROVED", statusForPaymentByCreditCard);
+            assertEquals("4500000", paymentAmount);
 
         }
         @Test

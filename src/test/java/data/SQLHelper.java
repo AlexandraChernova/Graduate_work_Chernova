@@ -21,7 +21,7 @@ public class SQLHelper {
 
     @SneakyThrows
     public static String getPaymentStatusByDebitCard(String paymentId) {
-        String statusSQL = "SELECT status FROM payment_entity limit 1;";
+        String statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
         String status = null;
         try (val conn = getConnection();
              val statusStmt = conn.prepareStatement(statusSQL)) {
@@ -37,7 +37,7 @@ public class SQLHelper {
 
     @SneakyThrows
     public static String getPaymentStatusByCreditCard(String paymentId) {
-        String statusSQL = "SELECT status FROM credit_request_entity limit 1;";
+        String statusSQL = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
         String status = null;
         try (val conn = getConnection();
              val statusStmt = conn.prepareStatement(statusSQL)) {
@@ -54,7 +54,7 @@ public class SQLHelper {
     @SneakyThrows
     public static String getPaymentId() {
         String paymentId = null;
-        val idSQL = "SELECT payment_id FROM order_entity order by created desc limit 1;";
+        val idSQL = "SELECT payment_id FROM order_entity ORDER BY id DESC LIMIT 1;";
         try (val conn = getConnection();
              val statusStmt = conn.prepareStatement(idSQL)) {
             try (val rs = statusStmt.executeQuery()) {
