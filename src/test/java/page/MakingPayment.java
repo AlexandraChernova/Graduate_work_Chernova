@@ -1,11 +1,13 @@
 package page;
 
 import com.codeborne.selenide.Condition;
-        import com.codeborne.selenide.SelenideElement;
-        import data.DataHelper;
+import com.codeborne.selenide.SelenideElement;
+import data.DataHelper;
 
-        import static com.codeborne.selenide.Selenide.$;
-        import static com.codeborne.selenide.Selenide.$$;
+import java.time.Duration;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 public class MakingPayment {
 
@@ -19,7 +21,7 @@ public class MakingPayment {
     private SelenideElement errorNotification = $(".notification_status_error .notification__content");
     private SelenideElement dataEntryError = $(".input__sub");
 
-    public void fillingInThePayersData (DataHelper.ApplicationProcessing applicationProcessing) {
+    public void fillingInThePayersData(DataHelper.ApplicationProcessing applicationProcessing) {
         cardNumber.setValue(applicationProcessing.getCardNumber());
         cardMonth.setValue(applicationProcessing.getMonth());
         cardYear.setValue(applicationProcessing.getYear());
@@ -29,11 +31,11 @@ public class MakingPayment {
     }
 
     public void checkPaymentSuccess() {
-        successNotification.shouldBe(Condition.visible);
+        successNotification.shouldBe(Condition.visible, Duration.ofSeconds(4));
     }
 
     public void checkIfPaymentNotSuccessful() {
-        errorNotification.shouldBe(Condition.visible);
+        errorNotification.shouldBe(Condition.visible, Duration.ofSeconds(4));
     }
 
     public void checkIfWrongFormatOfField() {

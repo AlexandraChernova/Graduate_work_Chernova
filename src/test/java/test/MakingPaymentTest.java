@@ -1,6 +1,7 @@
 package test;
 
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import data.DataHelper;
 import data.SQLHelper;
@@ -10,10 +11,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.postgresql.PGProperty;
 import page.OptionSelection;
-
-import java.util.Properties;
 
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.System.*;
@@ -55,9 +53,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             val validCardInformation = DataHelper.getAuthInfoUseTestData();
             makingPayment.fillingInThePayersData(validCardInformation);
             makingPayment.checkPaymentSuccess();
-            val paymentId = SQLHelper.getPaymentId();
-            val statusForPaymentByDebitCard = SQLHelper.getPaymentStatusByDebitCard(paymentId);
-            val paymentAmount = SQLHelper.getPaymentAmount(paymentId);
+            val statusForPaymentByDebitCard = SQLHelper.getPaymentStatusByDebitCard();
+            val paymentAmount = SQLHelper.getPaymentAmount();
             assertEquals("APPROVED", statusForPaymentByDebitCard);
             assertEquals("4500000", paymentAmount);
         }
@@ -69,9 +66,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             val validCardInformation = DataHelper.getAuthInfoUseTestData();
             makingPayment.fillingInThePayersData(validCardInformation);
             makingPayment.checkPaymentSuccess();
-            val paymentId = SQLHelper.getPaymentId();
-            val statusForPaymentByCreditCard = SQLHelper.getPaymentStatusByCreditCard(paymentId);
-            val paymentAmount = SQLHelper.getPaymentAmount(paymentId);
+            val statusForPaymentByCreditCard = SQLHelper.getPaymentStatusByCreditCard();
+            val paymentAmount = SQLHelper.getPaymentAmount();
             assertEquals("APPROVED", statusForPaymentByCreditCard);
             assertEquals("4500000", paymentAmount);
 
@@ -82,9 +78,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             val makingPayment = optionSelection.buyByDebitCard();
             val validCardInformation = DataHelper.getAuthInfoUseTestDataWithDeclinedCard();
             makingPayment.fillingInThePayersData(validCardInformation);
-            makingPayment.checkPaymentSuccess();
-            val paymentId = SQLHelper.getPaymentId();
-            val statusForPaymentByDebitCard = SQLHelper.getPaymentStatusByDebitCard(paymentId);
+            makingPayment.checkIfPaymentNotSuccessful();
+            val statusForPaymentByDebitCard = SQLHelper.getPaymentStatusByDebitCard();
             assertEquals("DECLINED", statusForPaymentByDebitCard);
             }
 
@@ -94,9 +89,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             val makingPayment = optionSelection.buyByCreditCard();
             val validCardInformation = DataHelper.getAuthInfoUseTestDataWithDeclinedCard();
             makingPayment.fillingInThePayersData(validCardInformation);
-            makingPayment.checkPaymentSuccess();
-            val paymentId = SQLHelper.getPaymentId();
-            val statusForPaymentByCreditCard = SQLHelper.getPaymentStatusByCreditCard(paymentId);
+            makingPayment.checkIfPaymentNotSuccessful();
+            val statusForPaymentByCreditCard = SQLHelper.getPaymentStatusByCreditCard();
             assertEquals("DECLINED", statusForPaymentByCreditCard);
         }
 

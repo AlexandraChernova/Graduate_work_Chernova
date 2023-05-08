@@ -2,12 +2,15 @@ package data;
 
 import lombok.SneakyThrows;
 import lombok.val;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class SQLHelper {
+    private static QueryRunner runner = new QueryRunner();
     private SQLHelper() {
     }
 
@@ -19,66 +22,57 @@ public class SQLHelper {
         return connection;
     }
 
+  //  @SneakyThrows
+    //public static String getPaymentStatusByDebitCard(String paymentId) {
+      //  String statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
+     //   String status = null;
+      //  try (val conn = getConnection();
+       //      val statusStmt = conn.prepareStatement(statusSQL)) {
+       //     statusStmt.setString(1, paymentId);
+       //     try (val rs = statusStmt.executeQuery()) {
+       //         if (rs.next()) {
+        //            status = rs.getString("status");
+         //       }
+        //    }
+      //  }
+      //  return status;
+    //}
+
     @SneakyThrows
-    public static String getPaymentStatusByDebitCard(String paymentId) {
-        String statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
-        String status = null;
-        try (val conn = getConnection();
-             val statusStmt = conn.prepareStatement(statusSQL)) {
-            statusStmt.setString(1, paymentId);
-            try (val rs = statusStmt.executeQuery()) {
-                if (rs.next()) {
-                    status = rs.getString("status");
-                }
+    public static String getPaymentStatusByDebitCard() {
+        val codeSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
+        try (val conn = getConnection()) {
+            val debitStatus = runner.query(conn, codeSQL, new ScalarHandler<String>());
+            return debitStatus;
+        }catch (SQLException exception) {
+            exception.printStackTrace();
             }
+            return null;
+
         }
-        return status;
+
+
+    @SneakyThrows
+    public static String getPaymentStatusByCreditCard() {
+        var codeSQL = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
+        try (val conn = getConnection()) {
+            val creditStatus = runner.query(conn, codeSQL, new ScalarHandler<String>());
+            return creditStatus;
+            }catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     @SneakyThrows
-    public static String getPaymentStatusByCreditCard(String paymentId) {
-        String statusSQL = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
-        String status = null;
-        try (val conn = getConnection();
-             val statusStmt = conn.prepareStatement(statusSQL)) {
-            statusStmt.setString(1, paymentId);
-            try (val rs = statusStmt.executeQuery()) {
-                if (rs.next()) {
-                    status = rs.getString("status");
-                }
-            }
-        }
-        return status;
-    }
-
-    @SneakyThrows
-    public static String getPaymentId() {
-        String paymentId = null;
-        val idSQL = "SELECT payment_id FROM order_entity ORDER BY id DESC LIMIT 1;";
-        try (val conn = getConnection();
-             val statusStmt = conn.prepareStatement(idSQL)) {
-            try (val rs = statusStmt.executeQuery()) {
-                if (rs.next()) {
-                    paymentId = rs.getString("payment_id");
-                }
-            }
-        }
-        return paymentId;
-    }
-
-    @SneakyThrows
-    public static String getPaymentAmount(String paymentId) {
+    public static String getPaymentAmount() {
         String amountSQL = "SELECT amount FROM payment_entity limit 1;";
-        String amount = null;
-        try (val conn = getConnection();
-             val statusStmt = conn.prepareStatement(amountSQL)) {
-            statusStmt.setString(1, paymentId);
-            try (val rs = statusStmt.executeQuery()) {
-                if (rs.next()) {
-                    amount = rs.getString("amount");
-                }
-            }
+        try (val conn = getConnection()) {
+            val amount = runner.query(conn, amountSQL, new ScalarHandler<String>());
+            return amount;
+        }catch (SQLException exception) {
+            exception.printStackTrace();
         }
-        return amount;
+        return null;
     }
 }
