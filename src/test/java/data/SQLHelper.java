@@ -22,27 +22,11 @@ public class SQLHelper {
         return connection;
     }
 
-  //  @SneakyThrows
-    //public static String getPaymentStatusByDebitCard(String paymentId) {
-      //  String statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
-     //   String status = null;
-      //  try (val conn = getConnection();
-       //      val statusStmt = conn.prepareStatement(statusSQL)) {
-       //     statusStmt.setString(1, paymentId);
-       //     try (val rs = statusStmt.executeQuery()) {
-       //         if (rs.next()) {
-        //            status = rs.getString("status");
-         //       }
-        //    }
-      //  }
-      //  return status;
-    //}
-
     @SneakyThrows
     public static String getPaymentStatusByDebitCard() {
-        val codeSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
-        try (val conn = getConnection()) {
-            val debitStatus = runner.query(conn, codeSQL, new ScalarHandler<String>());
+        var codeSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
+        try (var conn = getConnection()) {
+            var debitStatus = runner.query(conn, codeSQL, new ScalarHandler<String>());
             return debitStatus;
         }catch (SQLException exception) {
             exception.printStackTrace();
@@ -65,14 +49,23 @@ public class SQLHelper {
     }
 
     @SneakyThrows
-    public static String getPaymentAmount() {
+    public static Integer getPaymentAmount() {
         String amountSQL = "SELECT amount FROM payment_entity limit 1;";
-        try (val conn = getConnection()) {
-            val amount = runner.query(conn, amountSQL, new ScalarHandler<String>());
+        try (var conn = getConnection()) {
+            var amount = runner.query(conn, amountSQL, new ScalarHandler<Integer>());
             return amount;
         }catch (SQLException exception) {
             exception.printStackTrace();
         }
         return null;
+    }
+
+    @SneakyThrows
+    public static void cleanDatabase() {
+        var conn = getConnection();
+        runner.execute(conn, "DELETE FROM order_entity");
+        runner.execute(conn, "DELETE FROM payment_entity");
+        runner.execute(conn, "DELETE FROM credit_request_entity");
+
     }
 }
