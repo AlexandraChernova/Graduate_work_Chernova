@@ -11,17 +11,17 @@ import java.util.Random;
 
 
 public class DataHelper {
-    private static Faker fakerEnglish = new Faker(new Locale("en"));
+    private static final Faker fakerEnglish = new Faker(new Locale("en"));
     private static final Faker fakerRussian = new Faker(new Locale("ru", "RU"));
     static Random random = new Random();
 
     @Value
     public static class ApplicationProcessing {
-        private String cardNumber;
-        private String month;
-        private String year;
-        private String owner;
-        private String cvc;
+        String cardNumber;
+        String month;
+        String year;
+        String owner;
+        String cvc;
     }
 
     private DataHelper() {
@@ -34,8 +34,7 @@ public class DataHelper {
     }
 
     public static String getInvalidCardMonth() {
-        String invalidMonth = getCardMonth() + 20;
-        return invalidMonth;
+        return String.valueOf(Math.random()*10);
     }
 
     public static String getEmptyCardMonth() {

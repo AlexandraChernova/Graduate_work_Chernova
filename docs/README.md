@@ -1,6 +1,6 @@
 ## Описание проекта
 ### Запуск docker
-команда в терминале: docker-compose up;
+команда в терминале: docker-compose up -d;
 
 ### *Для MySQL*
 ### Запуск jar файла
