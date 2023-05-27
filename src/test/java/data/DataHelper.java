@@ -2,6 +2,7 @@ package data;
 
 import com.github.javafaker.Faker;
 import lombok.Value;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -77,7 +78,7 @@ public class DataHelper {
     }
 
     public static String invalidCardYearWithSymbols() {
-        return fakerEnglish.letterify("?");
+        return RandomStringUtils.randomAscii(1);
     }
 
     public static String expiredCardYear(){
@@ -99,7 +100,7 @@ public class DataHelper {
     }
 
     public static String invalidOwnersNameWithSymbols() {
-        return fakerEnglish.letterify("?");
+        return RandomStringUtils.randomAscii(1);
     }
 
     public static String invalidOwnersNameWithNumbers() {
@@ -126,7 +127,7 @@ public class DataHelper {
     }
 
     public static String invalidCvcWithSymbols() {
-        return fakerEnglish.letterify("?");
+        return RandomStringUtils.randomAscii(1);
     }
 
 
@@ -154,7 +155,7 @@ public class DataHelper {
     }
 
     public static String invalidCardNumberWithSymbols() {
-        return fakerEnglish.letterify("?");
+        return RandomStringUtils.randomAscii(1);
     }
 
     public static String getEmptyCardNumber() {
