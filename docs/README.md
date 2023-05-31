@@ -15,4 +15,4 @@ java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/app" -jar artifac
 ./gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"
 
 ### Генерация отчета и автоматическое открытие в браузере по умолчанию
-команда в терминале: .\gradlew allureServe
+команда в терминале: ./gradlew allureServe
